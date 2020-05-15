@@ -1,16 +1,16 @@
-Instructions for Use
-====================
+# Instructions for Use
+
 This assumes that you have already installed the g2remote package with
 all requirements as outlined in the file "install.txt".
 
-One-time setup instructions
----------------------------
+## One-time setup instructions
+
 1). Generate an ssh-key with
 
     $ ssh-keygen -b 4096 -f gen2_connect
 
     (or using the key generation program supplied with your ssh client).
-    This should generate TWO (2) files: gen2_connect and gen2_connect.pub
+    This should generate *two* (2) files: gen2_connect and gen2_connect.pub
     email your designated contact at Subaru with the "gen2_connect.pub
     file and your full name, institution and assigned remote observation
     periods.
@@ -18,8 +18,8 @@ One-time setup instructions
     (generating a key) before, simply mention this in the email and do
     not generate or attach a new key (unless we ask you to!).
     
-Per-observation setup instructions
-----------------------------------
+## Per-observation setup instructions
+
 2). You should receive from Subaru a "config.yml" file and a
     "g2vncpasswd" file.  It is recommended to keep these together in the
     same folder.
@@ -27,7 +27,7 @@ Per-observation setup instructions
     Examine the config.yml file, and make sure that the values for the
     following keys are correct:
     - vnc_passwd_file: the path to the g2vncpasswd file sent to you
-    - ssh-key: the path to the NON-".pub" file generated in step 1) of the
+    - ssh-key: the path to the *non*-".pub" file generated in step 1) of the
                 one-time setup instructions.
     
     If any of these are incorrect, correct them using a text editor.
@@ -37,14 +37,18 @@ Per-observation setup instructions
     
 4). In the first shell, run 
 
-    $ g2connect -f config.json
+    ```bash
+    $ g2connect -f config.yml
+    ```
 
     If all parameters are correct in the config file, you will be
     prompted to enter a 2-factor authentication code.
 
 5). In the second shell, run *another*
 
-    $ g2connect -f config.json
+    ```bash
+    $ g2connect -f config.yml
+    ```
 
     Use the 'a' command to show the 2-factor authentication code.  You
     will likely need to TYPE the code into the other command shell (cut
@@ -64,8 +68,7 @@ Per-observation setup instructions
     windows and then type the 'q' command in the second shell.  Type
     Ctrl-C in the first shell to terminate the tunneled connection.
 
-NOTES
-=====
+## Notes
 
 * You can use virtual desktops to position the screens if you don't
   have many displays.
@@ -75,20 +78,20 @@ NOTES
   terminals on each host, as described above) and use them to pop up
   additional screens on those hosts.
 
-SCREENS
-=======
-SCREEN      CONTENT
-------      -------
-1           hskymon (observation planning tool)
-2           instrument control GUIs
-3           integgui2 (observation execution tool)
-4           fitsview (QDAS, quick look, slit alignment, etc), HSC obslog
-5           guideview (guiding control and monitoring)
-6           statmon (current telescope status)
-7           instrument control and monitoring GUIs
-8           instrument control and monitoring GUIs
+## Screens
 
-Note that each screen is a 1900x1100 VNC window, so you will be managing a
+Screen   Content
+------ | -------
+1      | hskymon (observation planning tool)
+2      | instrument control GUIs
+3      | integgui2 (observation execution tool)
+4      | fitsview (QDAS, quick look, slit alignment, etc), HSC obslog
+5      | guideview (guiding control and monitoring)
+6      | statmon (current telescope status)
+7      | instrument control and monitoring GUIs
+8      | instrument control and monitoring GUIs
+
+Note that each screen is a 2550x1380 VNC window, so you will be managing a
 lot of large screens. Probably you are not interested in all screens.
 Consult your Support Astronomer to decide which ones are important for
 your observation.
