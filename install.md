@@ -49,7 +49,7 @@ See file [operation.md](https://github.com/naojsoft/g2remote/blob/master/operati
 ## Downloads
 
 * Windows users: you can download and install "tigervnc" and "vncviewer"
-  packages from the [tigervnc release site](https://github.com/TigerVNC/tigervnc/releases) 
+  packages from the [tigervnc release site](https://github.com/TigerVNC/tigervnc/releases).
   Be sure to get the correct versions for your platform.
 
 * All users: make sure you have a working Python 3.5 or later standard
