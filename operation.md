@@ -1,19 +1,21 @@
 # Instructions for Use
 
 This assumes that you have already installed the g2remote package with
-all requirements as outlined in the file "install.txt".
+all requirements as outlined in the file [install.md](https://github.com/naojsoft/g2remote/blob/master/install.md).
 
 ## One-time setup instructions
 
 1). Generate an ssh-key with
 
+    ```bash
     $ ssh-keygen -b 4096 -f gen2_connect
-
+    ```
+    
     (or using the key generation program supplied with your ssh client).
-    This should generate *two* (2) files: gen2_connect and gen2_connect.pub
-    email your designated contact at Subaru with the "gen2_connect.pub
-    file and your full name, institution and assigned remote observation
-    periods.
+    This should generate *two* (2) files: `gen2_connect` and
+    `gen2_connect.pub`. Email your designated contact at Subaru with the
+    "gen2_connect.pub file and your full name, institution and assigned
+    remote observation periods. 
     NOTE: you only need to do this once--if you have remote observed
     (generating a key) before, simply mention this in the email and do
     not generate or attach a new key (unless we ask you to!).
@@ -32,8 +34,8 @@ all requirements as outlined in the file "install.txt".
     
     If any of these are incorrect, correct them using a text editor.
 
-3). Start TWO (2) command shells, each one with your Python environment
-    enabled where you installed g2remote.
+3). Start *two* (2) command shells, each one with your Python environment
+    enabled where you installed `g2remote`.
     
 4). In the first shell, run 
 
@@ -50,12 +52,12 @@ all requirements as outlined in the file "install.txt".
     $ g2connect -f config.yml
     ```
 
-    Use the 'a' command to show the 2-factor authentication code.  You
+    Use the "a" command to show the 2-factor authentication code.  You
     will likely need to TYPE the code into the other command shell (cut
     and paste does not seem to work on some platforms).
 
     The 2FA code changes every minute or so, so if you wait too long to
-    type the code, you may need to use the 'a' command again as
+    type the code, you may need to use the "a" command again as
     necessary to get another code.  (If the connection times
     out before you can get the code entered, just initiate another
     connection and try again).
@@ -65,7 +67,7 @@ all requirements as outlined in the file "install.txt".
     (1-8).  See the explanation below for a description of the screens.
     
 7). When you are ready to terminate the observation, close the VNC
-    windows and then type the 'q' command in the second shell.  Type
+    windows and then type the "q" command in the second shell.  Type
     Ctrl-C in the first shell to terminate the tunneled connection.
 
 ## Notes

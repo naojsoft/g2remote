@@ -7,11 +7,11 @@ you to connect and see Subaru Telescope displays used for observation.
 
 Requirements and Installation
 -----------------------------
-See "install.txt"
+See [install.md](https://github.com/naojsoft/g2remote/blob/master/install.md)
 
 
 Operation
 ---------
-See "operation.txt"
+See [operation.md](https://github.com/naojsoft/g2remote/blob/master/operation.md)
 
 
