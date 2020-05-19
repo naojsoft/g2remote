@@ -33,43 +33,34 @@ following keys are correct:
 * `ssh-key`: the path to the *non*-".pub" file generated in step 1) of the
            one-time setup instructions.
       
-If any of these are incorrect, correct them using a text editor.
+If any of these are incorrect, or you are instructed to modify them,
+correct them using a text editor.
 
-3). Start *two* (2) command shells, each one with your Python environment
-    enabled where you installed `g2remote`.
+3). Start a command shell with the Python environment where you installed
+    `g2remote`.
     
-4). In the first shell, run 
+4). In the shell, run 
 
 ```bash
 $ g2connect -f config.yml
 ```
-  
-If all parameters are correct in the config file, you will be
-prompted to enter a 2-factor authentication code.
 
-5). In the second shell, run *another*
+You should be prompted with a `g2connect>` command loop.
+
+5). Run the command "c" to connect.  If successful, it should just return
+    to the command prompt.
 
 ```bash
-$ g2connect -f config.yml
+g2connect> c
+connecting ...
+g2connect> 
 ```
-  
-Use the "a" command to show the 2-factor authentication code.  You
-will likely need to *type* the code into the other command shell (cut
-and paste does not seem to work on some platforms).
- 
-The 2FA code changes every minute or so--if you wait too long to
-type the code, you may need to use the "a" command again as
-necessary to get another code.  (If the connection times
-out before you can get the code entered, just initiate another
-connection and try again).
 
-6). Once you are connected in the first shell, you can pop up the Gen2
-    displays from the second shell by typing the number of the screen
-    (1-8).  See the explanation below for a description of the screens.
+6). Open VNC screens by typing the number of the screen (1-8).  See the
+    explanation below for a description of the screens.
     
 7). When you are ready to terminate the observation, close the VNC
-    windows and then type the "q" command in the second shell.  Type
-    Ctrl-C in the first shell to terminate the tunneled connection.
+    windows and then type the "q" command.
 
 ## Notes
 
