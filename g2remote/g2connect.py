@@ -51,6 +51,7 @@ class G2Connect:
         self.servers = []
         self.proc = {}
         self.ev_quit = threading.Event()
+        self.debug = False
 
     def rdconfig(self, path):
         print("reading config file {}".format(path))
@@ -59,6 +60,7 @@ class G2Connect:
             self.config = yaml.safe_load(in_f)
 
         self.totp = pyotp.TOTP(self.config['secret'])
+        self.debug = self.config.get('debug', False)
 
         self.check_config()
 
@@ -88,6 +90,8 @@ class G2Connect:
         self.ev_quit.clear()
 
         # make ssh connection
+        if self.debug:
+            paramiko.common.logging.basicConfig(level=paramiko.common.DEBUG)
         client = paramiko.SSHClient()
         client.load_system_host_keys()
         client.set_missing_host_key_policy(paramiko.WarningPolicy())
