@@ -10,6 +10,9 @@ all requirements as outlined in the file [install.md](https://github.com/naojsof
 ```bash
 $ ssh-keygen -b 4096 -f gen2_connect
 ```
+
+IMPORTANT: *do not add a passphrase*; the program will not work with a key
+that has a passphrase.
       
 (or using the key generation program supplied with your ssh client).
 This should generate *two* (2) files: `gen2_connect` and

@@ -201,7 +201,10 @@ class G2Connect:
             ans = sys.stdin.readline().strip()
 
             try:
-                if ans == 'q':
+                if len(ans) == 0:
+                    continue
+
+                elif ans == 'q':
                     break
 
                 elif ans in ('h', '?'):
