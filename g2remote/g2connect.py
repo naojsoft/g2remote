@@ -29,7 +29,7 @@ import paramiko
 import yaml
 import pyotp
 
-screens = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+screens = [1, 2, 3, 4, 5, 6, 7, 8]
 menu = """
 Choose one of the following options:
 c: connect
