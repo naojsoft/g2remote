@@ -166,7 +166,7 @@ class G2Connect:
             user = self.config['user']
             passwd = self.config['vnc_passwd']
             port = 5900 + num
-            args = ['open', '-n', '-g',
+            args = ['open', '-g',
                     "vnc://{}:{}@localhost:{}".format(user, passwd, port)]
 
         elif system == 'windows':
