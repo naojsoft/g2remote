@@ -41,11 +41,22 @@ correct them using a text editor.
 
 3). Start a command shell with the Python environment where you installed
     `g2remote`.
-    
+
+If you are using Windows and have installed Anaconda or Miniconda
+for your Python environment, your Start menu should have an
+"Anaconda Prompt" item in the Anaconda3 folder. Use the "Anaconda Prompt"
+to run up your Windows command shell.
+
 4). In the shell, run 
 
 ```bash
 $ g2connect -f config.yml
+```
+
+For Windows OS users, run the following command in your "Anaconda Prompt" shell:
+
+```bash
+$ g2connect config.yml
 ```
 
 You should be prompted with a `g2connect>` command loop.
@@ -58,6 +69,11 @@ g2connect> c
 connecting ...
 g2connect> 
 ```
+
+For Windows OS users, your first connection attempt will likely result in a popup dialog box
+from Windows Defender Firewall with a message prompting you to "Allow Python to
+communicate on these networks:". Make sure that the "Private networks" box is checked
+and then click on "Allow access". After that, the connection should proceed normally.
 
 6). Open VNC screens by typing the number of the screen (1-8).  See the
     explanation below for a description of the screens.
