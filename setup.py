@@ -24,7 +24,7 @@ setup(
     packages = ['g2remote'],
     python_requires = '>=3.5',
     install_requires = ['pyotp>=2.3.0', 'paramiko>=2.7.1', 'pyyaml>=5.3.1'],
-    scripts = ["scripts/g2connect",],
+    scripts = ["scripts/g2connect", "scripts/g2connect.bat"],
     classifiers = [
         "License :: OSI Approved :: BSD License",
         "Operating System :: MacOS :: MacOS X",
