@@ -1,6 +1,6 @@
 # 使用方法
 
-ここでは、g2remoteパッケージはすでにお使いの環境下でインストールされているとします。インストールについては[こちら](https://github.com/naojsoft/g2remote/blob/master/install.md)をご確認ください。
+ここでは、g2remoteパッケージはすでにお使いの環境下でインストールされているとします。インストールについては[こちら](https://github.com/naojsoft/g2remote/blob/master/install_jp.md)をご確認ください。
 
 ## 初回利用時のみ
 
@@ -26,10 +26,17 @@ $ ssh-keygen -b 4096 -f gen2_connect
 
 3). Pythonの動作するコマンドシェルを開いて、`g2remote`をインストールしたPython環境を起動してください。
 
+Windowsをお使いで、Python環境としてAnacondaもしくはMinicondaをインストールしている場合、スタートメニューのAnaconda3フォルダに"Anaconda Prompt"があります。この"Anaconda Prompt"をコマンドシェルとしてお使いください。
+
 4). シェル内で、以下のコマンドを実行してください。
 
 ```bash
 $ g2connect -f config.yml
+```
+Windowsをお使いの場合は、"Anaconda Prompt"シェル内で、以下のコマンドを実行してください。
+
+```bash
+$ g2connect config.yml
 ```
 
 `g2connect>`プロンプトが表示されます。
@@ -41,6 +48,8 @@ g2connect> c
 connecting ...
 g2connect> 
 ```
+
+Windowsをお使いの場合、最初に接続しようとする際に、"Pythonにこれらのネットワークへの接続を許可する:"というWindows Defenderファイヤーウォールからの警告が表示されます。"プライベートネットワーク"にチェックが入っていることを確認して、アクセスを許可するボタンをクリックして下さい。その後は、正常に接続されるはずです。
 
 6). スクリーン番号の1から8を入力して、VNCスクリーンを開いてください。各スクリーンの表示する情報は以下をご覧ください。
 

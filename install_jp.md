@@ -19,13 +19,16 @@
 
 ## Windows
 
-* tigervnc viewer client プログラム。(version 1.7.1以上、通常は"tigervnc-viewer"パッケージに含まれています)
-* `vncpasswd` プログラム。(通常は"tigervnc-common"パッケージに含まれています)
+* VNC viewer クライアントとして、"TightVNC"か"RealVNC"をお使いいただけます。
+* Windows 10はOpen SSHを内蔵していますが、使用するには機能を有効にする必要があります。下記の場所に移動して、
 
+  設定->アプリ->オプション機能の管理
+
+  表示されるリストにOpenSSHが含まれていることを確認してください。もしリストに含まれていなければ、"オプション機能の管理"を押して、OpenSSHを"オプション機能"リストに追加してください。
 
 # インストール方法
 
-`g2remote` をインストールするには Python 3.5+ 環境を起動して、g2remoteフォルダに入り、以下を実行してください。
+`g2remote` をインストールするには Python 3.5+ 環境を起動して、ダウンロード済みの`g2remote`フォルダに入り、setup.pyファイルのある階層で、以下を実行してください。
 ```bash
 $ python setup.py install
 ```
@@ -34,11 +37,16 @@ $ python setup.py install
 
 ## 操作方法
 
-[こちら](https://github.com/naojsoft/g2remote/blob/master/operation.md)のファイルをご覧ください。
+[こちら](https://github.com/naojsoft/g2remote/blob/master/operation_jp.md)のファイルをご覧ください。
 
 ## ダウンロード
 
-* Windows ユーザー：こちらの[tigervnc公開サイト](https://github.com/TigerVNC/tigervnc/releases)から"tigervnc"と"vncviewer"をダウンロードできます。ご使用のOSに合った最新版をお使いください。
+* Windows ユーザー：
+  * ご使用のOSに合った最新版をお使いください。(通常は64-bit版です)
+  * 以下のサイトから"TightVNC"と"RealVNC"をダウンロードできます。
+  * [TightVNCダウンロードサイト](https://github.com/TigerVNC/tigervnc/releases)
+  * [RealVNC Viewer ダウンロードサイト](https://www.realvnc.com/en/connect/download/viewer/)
+  * TightVNCについては、"Viewer"コンポーネントのみのインストールを推奨します。TightVNCインストーラの"Choose Setup Type"画面で、"Custom" オプションを選択してください。続いて、"Custom Setup"画面で、"TightVNC Server"のドロップダウンメニューの中から、"Extra feature will be unavailable"をお選びください。"TightVNC Server"のドロップダウンメニューが赤い"X"に変わります。
 
 * 全ユーザー：Python3.5以上の環境でお使いください。(Pythonの経験のない方は、Minicondaの利用を推奨します。ダウンロードは[こちら](https://docs.conda.io/en/latest/miniconda.html)から可能です。)
 
