@@ -182,7 +182,8 @@ class G2Connect:
             paramiko.common.logging.basicConfig(level=paramiko.common.DEBUG)
         client = paramiko.SSHClient()
         client.load_system_host_keys()
-        client.set_missing_host_key_policy(paramiko.WarningPolicy())
+        #client.set_missing_host_key_policy(paramiko.WarningPolicy())
+        client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         self.client = client
 
         print("connecting ...")
