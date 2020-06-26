@@ -317,6 +317,10 @@ class G2Connect:
                 elif ans == 'x':
                     self.disconnect()
 
+                elif ans == 'w':
+                    from g2remote import remmina
+                    remmina.write_gen2_screens(screens, self.config)
+
                 elif ans in digits:
                     self.display(int(ans))
 
