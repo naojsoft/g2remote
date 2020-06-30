@@ -169,6 +169,7 @@ class G2Connect:
                 viewonly=1
                 fitwindow=1
                 WarnUnencrypted=0
+                Quality=High
                 """.format(self.vncserver_hostname, num, self.vncpwd_str), file=f)
         except Exception as e:
             print('Error: Unable to open {} for writing VNC viewer configuration file'.format(self.win_vnc_config_filepath))
