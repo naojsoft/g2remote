@@ -8,7 +8,7 @@
 * Working command line with ssh client
 * Ability to generate strong ssh keys (e.g. `ssh-keygen` program;
   usually already installed with ssh client)
-* python (version 3.5 or higher) in which you can install your own
+* python (version 3.7 or higher) in which you can install your own
   packages (e.g. Miniconda or Anaconda)
 * `g2remote` download (this package)
 
@@ -34,7 +34,7 @@
 
 # Installation
 
-Activate your Python 3.5+ environment and do
+Activate your Python 3.7+ environment and do
 
 ```bash
 $ python setup.py install
@@ -62,7 +62,7 @@ See file [operation.md](https://github.com/naojsoft/g2remote/blob/master/operati
     Then, in the "Custom Setup" screen, click on the "TightVNC Server" dropdown menu and select
     "Extra feature will be unavailable". The "TightVNC Server" dropdown menu should change to a red "X".
 
-* All users: make sure you have a working Python 3.5 or later standard
+* All users: make sure you have a working Python 3.7 or later standard
   environment.  (We recommend installing Miniconda if you are not sure;
   [download here](https://docs.conda.io/en/latest/miniconda.html))
 
