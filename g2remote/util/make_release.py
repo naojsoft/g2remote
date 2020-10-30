@@ -2,7 +2,7 @@ import os
 import time
 
 major = 1
-minor = 0
+minor = 1
 
 rlfile = 'version.py'
 backup = 'version.py.bak'

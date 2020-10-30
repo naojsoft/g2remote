@@ -36,6 +36,7 @@ Choose one of the following options:
 c: connect
 h: show this help message
 N: (digit from 1-8): open screen N
+s: open sound player
 q: quit
 r: re-read config file
 x: disconnect
@@ -208,6 +209,14 @@ class G2Connect:
             t.start()
             self.thread.append(t)
 
+        # sound forward
+        port = 8554
+        t = threading.Thread(target=self.forward_tunnel,
+                             args=(port, 'localhost', port,
+                                   client.get_transport()))
+        t.start()
+        self.thread.append(t)
+
     def forward_tunnel(self, local_port, remote_host, remote_port,
                        transport):
         # hack to pass some extra items to be used inside the handler
@@ -282,6 +291,24 @@ class G2Connect:
             print("stderr:\n" + proc[procname].stderr.read().decode())
 
 
+    def start_sound(self):
+        print("attempting to start sound player...")
+        procname = 'sound'
+        args = ['ffplay', '-nostats', '-rtsp_transport', 'tcp', 'rtsp://localhost:8554/stream']
+        if self.debug:
+            print('args are {}'.format(args))
+
+        self.proc[procname] = subprocess.Popen(args, stdin=subprocess.PIPE,
+                                               stdout=subprocess.PIPE,
+                                               stderr=subprocess.PIPE)
+
+        time.sleep(2)
+        res = self.proc[procname].poll()
+        if res is not None and res != 0:
+            print("hmm, ffplay appears to have exited with result {}".format(res))
+            print("stdout:\n" + proc[procname].stdout.read().decode())
+            print("stderr:\n" + proc[procname].stderr.read().decode())
+
     def get_system(self):
         system = platform.system().lower()
         return system
@@ -313,6 +340,9 @@ class G2Connect:
 
                 elif ans == 'c':
                     self.connect()
+
+                elif ans == 's':
+                    self.start_sound()
 
                 elif ans == 'x':
                     self.disconnect()

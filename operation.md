@@ -76,10 +76,11 @@ communicate on these networks:". Make sure that the "Private networks" box is ch
 and then click on "Allow access". After that, the connection should proceed normally.
 
 6). Open VNC screens by typing the number of the screen (1-8).  See the
-    explanation below for a description of the screens.
+    explanation below for a description of the screens.  If you want to hear
+    the Gen2 sound stream, type the "s" command.
     
 7). When you are ready to terminate the observation, close the VNC
-    windows and then type the "q" command.
+    and sound windows and then type the "q" command.
 
 ## Notes
 
