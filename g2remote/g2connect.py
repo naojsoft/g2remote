@@ -36,7 +36,6 @@ Choose one of the following options:
 c: connect
 h: show this help message
 N: (digit from 1-8): open screen N
-s: open sound player
 q: quit
 r: re-read config file
 x: disconnect
@@ -211,6 +210,14 @@ class G2Connect:
 
         # sound forward
         port = 8554
+        t = threading.Thread(target=self.forward_tunnel,
+                             args=(port, 'localhost', port,
+                                   client.get_transport()))
+        t.start()
+        self.thread.append(t)
+
+        # data forward
+        port = 10022
         t = threading.Thread(target=self.forward_tunnel,
                              args=(port, 'localhost', port,
                                    client.get_transport()))
