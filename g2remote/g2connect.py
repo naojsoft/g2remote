@@ -30,6 +30,9 @@ import paramiko
 import yaml
 import pyotp
 
+from g2remote.version import version
+
+
 screens = [1, 2, 3, 4, 5, 6, 7, 8]
 menu = """
 Choose one of the following options:
@@ -414,6 +417,10 @@ class ForwardHandler(socketserver.BaseRequestHandler):
 
 
 def main(options, args):
+
+    if options.showversion:
+        print("g2remote v{}".format(version))
+        sys.exit(0)
 
     if options.config is None or not os.path.exists(options.config):
         print("Please specify location of config file with -f")
