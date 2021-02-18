@@ -418,8 +418,8 @@ class ForwardHandler(socketserver.BaseRequestHandler):
 
 def main(options, args):
 
+    print("g2remote v{}".format(version))
     if options.showversion:
-        print("g2remote v{}".format(version))
         sys.exit(0)
 
     if options.config is None or not os.path.exists(options.config):
