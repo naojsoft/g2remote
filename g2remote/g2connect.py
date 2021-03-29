@@ -211,6 +211,15 @@ class G2Connect:
             t.start()
             self.thread.append(t)
 
+        # noVNC
+        for num in screens:
+            port = 6080 + num
+            t = threading.Thread(target=self.forward_tunnel,
+                                 args=(port, 'localhost', port,
+                                       client.get_transport()))
+            t.start()
+            self.thread.append(t)
+
         # sound forward
         port = 8554
         t = threading.Thread(target=self.forward_tunnel,
