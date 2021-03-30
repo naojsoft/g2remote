@@ -22,7 +22,8 @@ setup(
     keywords = "subaru, telescope, remote, observation, tools",
     url = "http://naojsoft.github.com/g2remote",
     packages = ['g2remote'],
-    python_requires = '>=3.5',
+    package_data = {'g2remote': ['html/*']},
+    python_requires = '>=3.7',
     install_requires = ['pyotp>=2.3.0', 'paramiko>=2.7.1', 'pyyaml>=5.3.1'],
     scripts = ["scripts/g2connect", "scripts/g2connect.bat"],
     classifiers = [

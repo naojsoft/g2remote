@@ -62,6 +62,7 @@ class G2Connect:
         self.ev_quit = threading.Event()
         self.debug = False
         self.vncserver_hostname = 'localhost'
+        self.my_server = None
 
     def rdconfig(self, path):
         print("reading config file {}".format(path))
