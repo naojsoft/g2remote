@@ -24,6 +24,8 @@ import time
 import select
 import socketserver
 import glob
+import http.server
+import socketserver
 
 # 3rd party imports
 import paramiko
@@ -31,6 +33,9 @@ import yaml
 import pyotp
 
 from g2remote.version import version
+from g2remote import __file__
+module_home, _ = os.path.split(__file__)
+html_home = os.path.join(module_home, 'html')
 
 
 screens = [1, 2, 3, 4, 5, 6, 7, 8]
@@ -236,6 +241,15 @@ class G2Connect:
         t.start()
         self.thread.append(t)
 
+        port = 8500
+        http_server = socketserver.TCPServer(("", port),
+                                             MyHttpRequestHandler)
+        t = threading.Thread(target=http_server.serve_forever,
+                             args=[])
+        t.start()
+        self.servers.append(http_server)
+        self.thread.append(t)
+
     def forward_tunnel(self, local_port, remote_host, remote_port,
                        transport):
         # hack to pass some extra items to be used inside the handler
@@ -423,6 +437,16 @@ class ForwardHandler(socketserver.BaseRequestHandler):
 
         chan.close()
         self.request.close()
+
+
+class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
+    def __init__(self, *args, **kwargs):
+        super(MyHttpRequestHandler, self).__init__(*args, directory=html_home, **kwargs)
+
+    def do_GET(self):
+        if self.path == '/':
+            self.path = '/gen2_screens.html'
+        return http.server.SimpleHTTPRequestHandler.do_GET(self)
 
 
 def main(options, args):
