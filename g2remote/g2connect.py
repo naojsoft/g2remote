@@ -250,6 +250,10 @@ class G2Connect:
         t.start()
         self.servers.append(http_server)
         self.thread.append(t)
+        print("Visit http://localhost:8500/ to view screens via web browser.")
+        print("Connecting password is found in your 'yml' configuration file.")
+        print("")
+        print("OR, open screens using VNC client using number commands (e.g. 3, 4, etc.")
 
     def forward_tunnel(self, local_port, remote_host, remote_port,
                        transport):
