@@ -68,7 +68,8 @@ class G2Connect:
         print("reading config file {}".format(path))
         self.config_path = path
         with open(path, 'r') as in_f:
-            self.config = yaml.safe_load(in_f)
+            buf = in_f.read()
+        self.config = yaml.safe_load(buf)
 
         self.totp = pyotp.TOTP(self.config['secret'])
         self.debug = self.config.get('debug', False)
@@ -296,7 +297,7 @@ class G2Connect:
 
         if system == 'linux':
             vncpwd = self.config['vnc_passwd_file']
-            args = ['vncviewer', '-passwd', vncpwd, '{}:{}'.format(self.vncserver_hostname, num)]
+            args = ['vncviewer', '-ViewOnly', '-passwd', vncpwd, '{}:{}'.format(self.vncserver_hostname, num)]
 
         elif system == 'darwin':
             # <-- Mac OS X
@@ -325,8 +326,8 @@ class G2Connect:
         res = self.proc[procname].poll()
         if res is not None and res != 0:
             print("hmm, VNC viewer appears to have exited with result {}".format(res))
-            print("stdout:\n" + proc[procname].stdout.read().decode())
-            print("stderr:\n" + proc[procname].stderr.read().decode())
+            print("stdout:\n" + self.proc[procname].stdout.read().decode())
+            print("stderr:\n" + self.proc[procname].stderr.read().decode())
 
 
     def start_sound(self):
@@ -344,8 +345,8 @@ class G2Connect:
         res = self.proc[procname].poll()
         if res is not None and res != 0:
             print("hmm, ffplay appears to have exited with result {}".format(res))
-            print("stdout:\n" + proc[procname].stdout.read().decode())
-            print("stderr:\n" + proc[procname].stderr.read().decode())
+            print("stdout:\n" + self.proc[procname].stdout.read().decode())
+            print("stderr:\n" + self.proc[procname].stderr.read().decode())
 
     def get_system(self):
         system = platform.system().lower()
