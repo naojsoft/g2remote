@@ -297,7 +297,7 @@ class G2Connect:
 
         if system == 'linux':
             vncpwd = self.config['vnc_passwd_file']
-            args = ['vncviewer', '-ViewOnly', '-passwd', vncpwd, '{}:{}'.format(self.vncserver_hostname, num)]
+            args = ['vncviewer', '-passwd', vncpwd, '{}:{}'.format(self.vncserver_hostname, num)]
 
         elif system == 'darwin':
             # <-- Mac OS X
