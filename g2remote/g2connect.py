@@ -31,11 +31,15 @@ import socketserver
 import paramiko
 import yaml
 import pyotp
+from jinja2 import Environment, FileSystemLoader
 
 from g2remote.version import version
 from g2remote import __file__
 module_home, _ = os.path.split(__file__)
 html_home = os.path.join(module_home, 'html')
+
+env = Environment(loader=FileSystemLoader(html_home))
+template = env.get_template('gen2_screens.html')
 
 
 screens = [1, 2, 3, 4, 5, 6, 7, 8]
@@ -73,6 +77,7 @@ class G2Connect:
 
         self.totp = pyotp.TOTP(self.config['secret'])
         self.debug = self.config.get('debug', False)
+        MyHttpRequestHandler.vnc_passwd = self.config['vnc_passwd']
 
         # The hostname of the VNC server is normally 'localhost',
         # because that is how the SSH tunnel is set up. However, for
@@ -236,7 +241,6 @@ class G2Connect:
         self.servers.append(http_server)
         self.thread.append(t)
         print("Visit http://localhost:8500/ to view screens via web browser.")
-        print("Connecting password is found in your 'yml' configuration file.")
         print("")
         print("OR, open screens using VNC client using number commands (e.g. 3, 4, etc.")
 
@@ -401,14 +405,20 @@ class ForwardHandler(socketserver.BaseRequestHandler):
         self.request.close()
 
 
-class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
-    def __init__(self, *args, **kwargs):
-        super(MyHttpRequestHandler, self).__init__(*args, directory=html_home, **kwargs)
+class MyHttpRequestHandler(http.server.BaseHTTPRequestHandler):
 
-    def do_GET(self):
-        if self.path == '/':
-            self.path = '/gen2_screens.html'
-        return http.server.SimpleHTTPRequestHandler.do_GET(self)
+    # vars to pass to template
+    vnc_passwd = ''
+
+    def _set_headers(self):
+        self.send_response(200)
+        self.send_header('Content-type', 'text/html')
+        self.end_headers()
+
+    def do_GET(self): # handle GET request
+        vnc_passwd = self.vnc_passwd
+        self._set_headers()
+        self.wfile.write(template.render(vncpass=vnc_passwd).encode())
 
 
 def main(options, args):

@@ -24,7 +24,8 @@ setup(
     packages = ['g2remote'],
     package_data = {'g2remote': ['html/*']},
     python_requires = '>=3.7',
-    install_requires = ['pyotp>=2.3.0', 'paramiko>=2.7.1', 'pyyaml>=5.3.1'],
+    install_requires = ['pyotp>=2.3.0', 'paramiko>=2.7.1', 'pyyaml>=5.3.1',
+                        'jinja2>=3.0.0'],
     scripts = ["scripts/g2connect", "scripts/g2connect.bat"],
     classifiers = [
         "License :: OSI Approved :: BSD License",
