@@ -227,22 +227,6 @@ class G2Connect:
             t.start()
             self.thread.append(t)
 
-        # sound forward
-        port = 8554
-        t = threading.Thread(target=self.forward_tunnel,
-                             args=(port, 'localhost', port,
-                                   client.get_transport()))
-        t.start()
-        self.thread.append(t)
-
-        # data forward
-        port = 10022
-        t = threading.Thread(target=self.forward_tunnel,
-                             args=(port, 'localhost', port,
-                                   client.get_transport()))
-        t.start()
-        self.thread.append(t)
-
         port = 8500
         http_server = socketserver.TCPServer(("", port),
                                              MyHttpRequestHandler)
@@ -330,24 +314,6 @@ class G2Connect:
             print("stderr:\n" + self.proc[procname].stderr.read().decode())
 
 
-    def start_sound(self):
-        print("attempting to start sound player...")
-        procname = 'sound'
-        args = ['ffplay', '-nostats', '-rtsp_transport', 'tcp', 'rtsp://localhost:8554/stream']
-        if self.debug:
-            print('args are {}'.format(args))
-
-        self.proc[procname] = subprocess.Popen(args, stdin=subprocess.PIPE,
-                                               stdout=subprocess.PIPE,
-                                               stderr=subprocess.PIPE)
-
-        time.sleep(2)
-        res = self.proc[procname].poll()
-        if res is not None and res != 0:
-            print("hmm, ffplay appears to have exited with result {}".format(res))
-            print("stdout:\n" + self.proc[procname].stdout.read().decode())
-            print("stderr:\n" + self.proc[procname].stderr.read().decode())
-
     def get_system(self):
         system = platform.system().lower()
         return system
@@ -371,17 +337,11 @@ class G2Connect:
                 elif ans in ('h', '?'):
                     print(menu)
 
-                elif ans == 'a':
-                    print(self.totp.now())
-
                 elif ans == 'r':
                     self.rdconfig(self.config_path)
 
                 elif ans == 'c':
                     self.connect()
-
-                elif ans == 's':
-                    self.start_sound()
 
                 elif ans == 'x':
                     self.disconnect()
