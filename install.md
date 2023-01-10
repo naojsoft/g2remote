@@ -37,11 +37,14 @@
 Activate your Python 3.7+ environment and do
 
 ```bash
-$ python setup.py install
+$ conda install paramiko
+$ pip install .
 ```
 
 to install `g2remote`.  This should download and install any missing
-Python requirements.
+Python requirements.  *We recommend to install paramiko by conda, as shown
+above, because some platforms have trouble building/using the pip installed
+version*.
 
 
 ## Operation
