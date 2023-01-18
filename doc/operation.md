@@ -1,7 +1,7 @@
 # Instructions for Use
 
 This assumes that you have already installed the g2remote package with
-all requirements as outlined in the file [install.md](https://github.com/naojsoft/g2remote/blob/master/install.md).
+all requirements as outlined in the file [install.md](https://github.com/naojsoft/g2remote/blob/master/doc/install.md).
 
 ## One-time setup instructions
 
@@ -85,8 +85,8 @@ After that, the connection should proceed normally.
     (others may also work).  You will see a list of links to Gen2 screens.
     Open each screen that you are interested in viewing in a separate
     browser tab.  In each tab, click the "Connect" button to view that
-    screen.
-
+    screen.\
+    \
     You can drag tabs out onto your desktop as needed to view multiple
     screens at the same time.  See the explanation below (under "Screens")
     for a description of the screens.  The screen may be larger than the

@@ -43,7 +43,8 @@ Now install g2remote like this:
 
 ```bash
 (subaru-gers)$ pip install git+https://github.com/naojsoft/g2remote
-``
+```
+
 This should download and install g2remote as well as any missing
 Python requirements.  *We recommend to install paramiko by conda, as shown
 above, because some platforms have trouble building/using the pip installed
@@ -52,7 +53,7 @@ version*.
 
 ## Operation
 
-See file [operation.md](https://github.com/naojsoft/g2remote/blob/master/operation.md)
+See file [operation.md](https://github.com/naojsoft/g2remote/blob/master/doc/operation.md)
 
 
 ## Downloads
