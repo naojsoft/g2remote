@@ -47,7 +47,6 @@ menu = """
 Choose one of the following options:
 c: connect
 h: show this help message
-N: (digit from 1-8): open screen N
 q: quit
 r: re-read config file
 x: disconnect
@@ -242,7 +241,6 @@ class G2Connect:
         self.thread.append(t)
         print("Visit http://localhost:8500/ to view screens via web browser.")
         print("")
-        print("OR, open screens using VNC client using number commands (e.g. 3, 4, etc.")
 
     def forward_tunnel(self, local_port, remote_host, remote_port,
                        transport):
