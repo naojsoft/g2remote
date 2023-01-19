@@ -2,25 +2,15 @@
 
 ## 全OS共通
 
-* 解像度2550x1380のウィンドウを表示できる大型モニタ、もしくは複数台のモニタ(e.g. Apple Retina display)。1-2台の大型モニタを繋げた仮想デスクトップ環境も使用可能です。
+* 大きなウィンドウが表示可能な高解像度モニター。Apple Retina displayで使用されているHiDPIスクリーンなど。
 * sshクライアントが使えるコマンドライン環境
-* 公開鍵認証を設定できること (e.g. `ssh-keygen`など。通常ではsshクライアントと共にインストールされています)
-* 自分でパッケージをインストールできるPython(3.7以上)環境 (e.g. Miniconda or Anaconda)
-* `g2remote`のダウンロード (このパッケージです)
+* 鍵認証を設定できること (e.g. `ssh-keygen`など。通常ではsshクライアントと共にインストールされています)
+* 自分でパッケージをインストールできるPython3.7以上の環境。Miniconda又はAnacondでの使用を推奨。
+* HTML5対応のWebブラウザ。　サポートされているのブラウザは、Firefox,Chrome,SafariとEdgeです。
 
-## Linux
+## Windows（補足）
 
-* tigervnc viewer client プログラム (version 1.7.1以上、通常は"tigervnc-viewer"パッケージに含まれています)
-* `vncpasswd` プログラム。(通常は"tigervnc-common"パッケージに含まれています)
-
-## macOS
-
-* "Screen Sharing" プログラム。  macOSには標準でインストールされています。
-
-## Windows
-
-* VNC viewer クライアントとして、"TightVNC"か"RealVNC"をお使いいただけます。
-* Windows 10はOpen SSHを内蔵していますが、使用するには機能を有効にする必要があります。下記の場所に移動して、
+* Windows 10はOpenSSHがインストールされていますが、使用するには機能を有効にする必要があるかもしれません。下記の場所に移動して、
 
   設定->アプリ->オプション機能の管理
 
@@ -28,25 +18,36 @@
 
 # インストール方法
 
-`g2remote` をインストールするには Python 3.7+ 環境を起動して、ダウンロード済みの`g2remote`フォルダに入り、setup.pyファイルのある階層で、以下を実行してください。
+すでに仮想環境がある場合は、他の環境への影響を避けるために、Python3.7以上の別の仮想環境を作成してください。
+"subaru-gers"という名で、新たな仮想環境を構築する場合は：
+
 ```bash
-$ python setup.py install
+$ conda create -n subaru-gers python=3.10
 ```
 
-実行と同時に、不足しているPythonパッケージもインストールされます。
+Conda activateコマンドで、新たに作成したPython仮想環境を利用し、 "git"と"paramiko"パッケージをインストールします。
+
+```bash
+$ conda activate subaru-gers
+(subaru-gers)$ conda install git paramiko
+```
+
+その後g2remoteをインストールします。
+
+```bash
+(subaru-gers)$ pip install git+https://github.com/naojsoft/g2remote
+```
+
+このコマンドはg2remoteをダウンロード、インストールすると同時に、必要なPythonパッケージもインストールします。
+*上記のように"paramiko"をconda installする事を推奨します。pip installをするとOSによりインストールトラブルが起こる可能性があります。
+
 
 ## 操作方法
 
-[こちら](https://github.com/naojsoft/g2remote/blob/master/operation_jp.md)のファイルをご覧ください。
+[こちら](https://github.com/naojsoft/g2remote/blob/master/doc/operation_jp.md)のファイルをご覧ください。
+
 
 ## ダウンロード
 
-* Windows ユーザー：
-  * ご使用のOSに合った最新版をお使いください。(通常は64-bit版です)
-  * 以下のサイトから"TightVNC"と"RealVNC"をダウンロードできます。
-  * [TightVNCダウンロードサイト](https://github.com/TigerVNC/tigervnc/releases)
-  * [RealVNC Viewer ダウンロードサイト](https://www.realvnc.com/en/connect/download/viewer/)
-  * TightVNCについては、"Viewer"コンポーネントのみのインストールを推奨します。TightVNCインストーラの"Choose Setup Type"画面で、"Custom" オプションを選択してください。続いて、"Custom Setup"画面で、"TightVNC Server"のドロップダウンメニューの中から、"Extra feature will be unavailable"をお選びください。"TightVNC Server"のドロップダウンメニューが赤い"X"に変わります。
-
-* 全ユーザー：Python3.7以上の環境でお使いください。(Pythonの経験のない方は、Minicondaの利用を推奨します。ダウンロードは[こちら](https://docs.conda.io/en/latest/miniconda.html)から可能です。)
+* 全ユーザー：Python3.7以上のシステム環境をお使いください。(不明な場合は、、Minicondaのインストールを推奨します。ダウンロードは[こちら](https://docs.conda.io/en/latest/miniconda.html)です。
 
