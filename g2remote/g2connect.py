@@ -13,6 +13,11 @@ Usage:
   then:
   $ g2remote -f config.yml
 
+  OR:
+  $ g2remote -f config.toml
+
+depending upon the suffix of your configuration file.
+
 """
 # stdlib imports
 import sys
@@ -26,6 +31,7 @@ import socketserver
 import glob
 import http.server
 import socketserver
+import tomli
 
 # 3rd party imports
 import paramiko
@@ -72,7 +78,10 @@ class G2Connect:
         self.config_path = path
         with open(path, 'r') as in_f:
             buf = in_f.read()
-        self.config = yaml.safe_load(buf)
+        if path.endswith(".yml"):
+            self.config = yaml.safe_load(buf)
+        else:
+            self.config = tomli.loads(buf)
 
         self.totp = pyotp.TOTP(self.config['secret'])
         self.debug = self.config.get('debug', False)
@@ -259,11 +268,7 @@ class G2Connect:
         print("disconnecting...")
         self.ev_quit.set()
 
-        # shutdown all VNCs
-        for k, p in list(self.proc.items()):
-            del self.proc[k]
-            p.kill()
-        self.proc = {}
+        self.stop_all()
 
         # shutdown all forwarders
         for s in self.servers:
@@ -278,12 +283,36 @@ class G2Connect:
         self.thread = []
 
     def display(self, num):
-        print("attempting to start VNC sessions...")
+        print(f"attempting to start VNC sessions for screen {num}")
+        self.start_display(num)
+
+    def get_geometry(self, num):
+        """Get the local screen position for screen `num` from config
+        file, if available, else return None.
+        """
+        geom = None
+        if 'screens' not in self.config:
+            return geom
+        name = f"screen_{num}"
+        screens = self.config['screens']
+
+        if name in screens:
+            info = screens[name]
+            geom = info.get('geometry', None)
+        return geom
+
+    def start_display(self, num):
         system = self.get_system()
 
+        args = []
+        geom = self.get_geometry(num)
+
         if system == 'linux':
+            if geom is not None:
+                args.extend(['-geometry', geom])
             vncpwd = self.config['vnc_passwd_file']
-            args = ['vncviewer', '-passwd', vncpwd, '{}:{}'.format(self.vncserver_hostname, num)]
+            args.extend(['-passwd', vncpwd])
+            args = ['vncviewer'] + args + ['{}:{}'.format(self.vncserver_hostname, num)]
 
         elif system == 'darwin':
             # <-- Mac OS X
@@ -315,6 +344,34 @@ class G2Connect:
             print("stdout:\n" + self.proc[procname].stdout.read().decode())
             print("stderr:\n" + self.proc[procname].stderr.read().decode())
 
+    def start_all(self):
+        if 'screens' not in self.config:
+            print("No screens found in config file!")
+            return
+
+        screens = self.config['screens']
+        for name in screens:
+            name, num = name.split('_')
+            num = int(num)
+            self.start_display(num)
+
+    def stop_display(self, num):
+        procname = f'screen_{num}'
+
+        if procname in self.proc:
+            p = self.proc[procname]
+            del self.proc[procname]
+            p.kill()
+
+    def stop_all(self):
+        # shutdown all VNCs
+        for k, p in list(self.proc.items()):
+            del self.proc[k]
+            try:
+                p.kill()
+            except Exception as e:
+                pass
+        self.proc = {}
 
     def get_system(self):
         system = platform.system().lower()
@@ -347,6 +404,9 @@ class G2Connect:
 
                 elif ans == 'x':
                     self.disconnect()
+
+                elif ans == 'a':
+                    self.start_all()
 
                 elif ans in digits:
                     self.display(int(ans))
@@ -431,5 +491,6 @@ def main(options, args):
 
     g2c = G2Connect()
     g2c.rdconfig(options.config)
+    g2c.check_config()
 
     g2c.cmd_loop()
