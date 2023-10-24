@@ -31,7 +31,11 @@ import socketserver
 import glob
 import http.server
 import socketserver
-import tomli
+try:
+    import tomllib
+    have_tomllib = True
+except ImportError:
+    have_tomllib = False
 
 # 3rd party imports
 import paramiko
@@ -81,7 +85,9 @@ class G2Connect:
         if path.endswith(".yml"):
             self.config = yaml.safe_load(buf)
         else:
-            self.config = tomli.loads(buf)
+            if not have_tomllib:
+                raise ValueError("Need python 3.11 to read TOML configs")
+            self.config = tomllib.loads(buf)
 
         self.totp = pyotp.TOTP(self.config['secret'])
         self.debug = self.config.get('debug', False)
