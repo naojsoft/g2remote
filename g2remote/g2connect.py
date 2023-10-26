@@ -73,7 +73,7 @@ class G2Connect:
         self.servers = []
         self.proc = {}
         self.ev_quit = threading.Event()
-        self.debug = False
+        self.debug = True
         self.vncserver_hostname = 'localhost'
         self.my_server = None
 
@@ -89,7 +89,8 @@ class G2Connect:
                 raise ValueError("Need python 3.11 to read TOML configs")
             self.config = tomllib.loads(buf)
 
-        self.totp = pyotp.TOTP(self.config['secret'])
+        if 'secret' in self.config:
+            self.totp = pyotp.TOTP(self.config['secret'])
         self.debug = self.config.get('debug', False)
         MyHttpRequestHandler.vnc_passwd = self.config['vnc_passwd']
 
@@ -216,13 +217,16 @@ class G2Connect:
         client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         self.client = client
 
+        kwargs = dict(username=self.config['user'],
+                      key_filename=self.config['ssh_key'],
+                      look_for_keys=False)
+        if self.totp is not None:
+            kwargs['password'] = self.totp.now()
+
         print("connecting ...")
         try:
             client.connect(self.config['server'], self.config['port'],
-                           username=self.config['user'],
-                           key_filename=self.config['ssh_key'],
-                           look_for_keys=False,
-                           password=self.totp.now())
+                           **kwargs)
         except Exception as e:
             raise Exception("*** Failed to connect to %s:%d: %r" % (
                 self.config['server'], self.config['port'], e))
