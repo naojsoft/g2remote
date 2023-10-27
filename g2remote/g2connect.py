@@ -73,7 +73,7 @@ class G2Connect:
         self.servers = []
         self.proc = {}
         self.ev_quit = threading.Event()
-        self.debug = True
+        self.debug = False
         self.vncserver_hostname = 'localhost'
         self.my_server = None
 
@@ -98,7 +98,8 @@ class G2Connect:
         # because that is how the SSH tunnel is set up. However, for
         # debugging, it will be convenient to be able to optionally specify the
         # hostname of the VNC server in the configuration file.
-        self.vncserver_hostname = self.config.get('vncserver_hostname', self.vncserver_hostname)
+        self.vncserver_hostname = self.config.get('vncserver_hostname',
+                                                  self.vncserver_hostname)
 
         # For Windows, we have to determine the filepath of the VNC viewer application.
         if self.get_system() == 'windows':
@@ -219,7 +220,8 @@ class G2Connect:
 
         kwargs = dict(username=self.config['user'],
                       key_filename=self.config['ssh_key'],
-                      look_for_keys=False)
+                      look_for_keys=False,
+                      allow_agent=False)
         if self.totp is not None:
             kwargs['password'] = self.totp.now()
 
