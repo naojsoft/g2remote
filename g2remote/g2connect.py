@@ -233,35 +233,58 @@ class G2Connect:
             raise Exception("*** Failed to connect to %s:%d: %r" % (
                 self.config['server'], self.config['port'], e))
 
+        # only start as many forwards as we need to for VNC screens
+        _screens = screens
+        if 'screens' in self.config:
+            _screens = []
+            for key in self.config['screens']:
+                if key.startswith('screen_'):
+                    _, num = key.split('_')
+                    _screens.append(int(num))
+
         # set up threads for all the port forwards
         self.thread = []
-        for num in screens:
-            port = 5900 + num
+
+        if self.config.get('use_vnc', False):
+            # set up VNC forwards
+            for num in _screens:
+                port = 5900 + num
+                t = threading.Thread(target=self.forward_tunnel,
+                                     args=(port, 'localhost', port,
+                                           client.get_transport()))
+                t.start()
+                self.thread.append(t)
+
+        if self.config.get('use_novnc', True):
+            # set up noVNC forwards
+            for num in _screens:
+                port = 6080 + num
+                t = threading.Thread(target=self.forward_tunnel,
+                                     args=(port, 'localhost', port,
+                                           client.get_transport()))
+                t.start()
+                self.thread.append(t)
+
+            # set up local http server
+            port = 8500
+            http_server = socketserver.TCPServer(("localhost", port),
+                                                 MyHttpRequestHandler)
+            t = threading.Thread(target=http_server.serve_forever,
+                                 args=[])
+            t.start()
+            self.servers.append(http_server)
+            self.thread.append(t)
+            print("Visit http://localhost:8500/ to view screens via web browser.")
+            print("")
+
+        if self.config.get('use_sound', False):
+            # set up sound forward
+	    # RTSP (gen2 sound)
             t = threading.Thread(target=self.forward_tunnel,
-                                 args=(port, 'localhost', port,
+                                 args=(8554, 'localhost', 8554,
                                        client.get_transport()))
             t.start()
             self.thread.append(t)
-
-        # noVNC
-        for num in screens:
-            port = 6080 + num
-            t = threading.Thread(target=self.forward_tunnel,
-                                 args=(port, 'localhost', port,
-                                       client.get_transport()))
-            t.start()
-            self.thread.append(t)
-
-        port = 8500
-        http_server = socketserver.TCPServer(("", port),
-                                             MyHttpRequestHandler)
-        t = threading.Thread(target=http_server.serve_forever,
-                             args=[])
-        t.start()
-        self.servers.append(http_server)
-        self.thread.append(t)
-        print("Visit http://localhost:8500/ to view screens via web browser.")
-        print("")
 
     def forward_tunnel(self, local_port, remote_host, remote_port,
                        transport):
@@ -270,8 +293,9 @@ class G2Connect:
             chain_host = remote_host
             chain_port = remote_port
             ssh_transport = transport
+            ssh_transport.window_size = 2147483647
 
-        fws = ForwardServer(("", local_port), MyHandler)
+        fws = ForwardServer(("localhost", local_port), MyHandler)
         fws.ev_quit = self.ev_quit
         self.servers.append(fws)
         fws.serve_forever(poll_interval=0.5)
@@ -458,15 +482,16 @@ class ForwardHandler(socketserver.BaseRequestHandler):
             return
 
         # ferry forwarding traffic
+        pkt_size = 8192
         while not self.server.ev_quit.is_set():
             r, w, x = select.select([self.request, chan], [], [])
             if self.request in r:
-                data = self.request.recv(1024)
+                data = self.request.recv(pkt_size)
                 if len(data) == 0:
                     break
                 chan.send(data)
             if chan in r:
-                data = chan.recv(1024)
+                data = chan.recv(pkt_size)
                 if len(data) == 0:
                     break
                 self.request.send(data)

@@ -41,6 +41,7 @@ sdist
 develop-eggs
 .installed.cfg
 distribute-*.tar.gz
+version.py
 
 # Other
 .*.swp
