@@ -30,7 +30,6 @@ import select
 import socketserver
 import glob
 import http.server
-import socketserver
 try:
     import tomllib
     have_tomllib = True
@@ -64,7 +63,8 @@ x: disconnect
 
 class G2Connect:
 
-    def __init__(self):
+    def __init__(self, logger=None):
+        self.logger = logger
         self.config_path = None
         self.config = {}
         self.client = None
@@ -78,7 +78,10 @@ class G2Connect:
         self.my_server = None
 
     def rdconfig(self, path):
-        print("reading config file {}".format(path))
+        if self.logger is not None:
+            self.logger.info(f"reading config file {path}")
+        else:
+            print(f"reading config file {path}")
         self.config_path = path
         with open(path, 'r') as in_f:
             buf = in_f.read()
@@ -108,6 +111,10 @@ class G2Connect:
                 print('vncviewer is {}'.format(self.win_vncviewer))
 
         self.check_config()
+
+        # return name of this config, if it has one
+        if 'name' in self.config:
+            return self.config['name']
 
     def find_win_vncviewer(self):
         # On Windows, determine the filepath of the VNC vieweer application.
@@ -159,14 +166,19 @@ class G2Connect:
 
         ssh_file = self.config['ssh_key']
         if not os.path.exists(ssh_file):
-            print("'ssh_key': doesn't seem to refer to an existing file: %s" % (
-                ssh_file))
+            if self.logger is not None:
+                self.logger.error(f"'ssh_key': doesn't seem to refer to an existing file: {ssh_file}")
+            else:
+                print(f"'ssh_key': doesn't seem to refer to an existing file: {ssh_file}")
 
         if system in ['darwin']:
             # mac users need to have a VNC password
             vncpwd = self.config.get('vnc_passwd', '')
             if len(vncpwd) == 0:
-                print("'vnc_passwd': doesn't seem to have a password")
+                if self.logger is not None:
+                    self.logger.error("'vnc_passwd': doesn't seem to have a password")
+                else:
+                    print("'vnc_passwd': doesn't seem to have a password")
 
         else:
             # non-mac users need to have a viable VNC password file
@@ -181,8 +193,10 @@ class G2Connect:
                     vncpwd_array = ['{:02x}'.format(item) for item in self.vncpwd]
                     self.vncpwd_str = ''.join(vncpwd_array)
             else:
-                print("'vnc_passwd_file': doesn't seem to refer to an existing file: %s" % (
-                    vncpwd_file))
+                if self.logger is not None:
+                    self.logger.error(f"'vnc_passwd_file': doesn't seem to refer to an existing file: {vncpwd_file}")
+                else:
+                    print(f"'vnc_passwd_file': doesn't seem to refer to an existing file: {vncpwd_file}")
 
     def write_win_vnc_config_file(self, num):
         # For Windows, write a VNC viewer configuration file into the same directory
@@ -225,7 +239,10 @@ class G2Connect:
         if self.totp is not None:
             kwargs['password'] = self.totp.now()
 
-        print("connecting ...")
+        if self.logger is not None:
+            self.logger.info("connecting ...")
+        else:
+            print("connecting ...")
         try:
             client.connect(self.config['server'], self.config['port'],
                            **kwargs)
@@ -274,8 +291,9 @@ class G2Connect:
             t.start()
             self.servers.append(http_server)
             self.thread.append(t)
-            print("Visit http://localhost:8500/ to view screens via web browser.")
-            print("")
+            if self.logger is None:
+                print("Visit http://localhost:8500/ to view screens via web browser.")
+                print("")
 
         if self.config.get('use_sound', False):
             # set up sound forward
@@ -301,7 +319,10 @@ class G2Connect:
         fws.serve_forever(poll_interval=0.5)
 
     def disconnect(self):
-        print("disconnecting...")
+        if self.logger is not None:
+            self.logger.info("disconnecting...")
+        else:
+            print("disconnecting...")
         self.ev_quit.set()
 
         self.stop_all()
@@ -319,7 +340,10 @@ class G2Connect:
         self.thread = []
 
     def display(self, num):
-        print(f"attempting to start VNC sessions for screen {num}")
+        if self.logger is not None:
+            self.logger.info(f"attempting to start VNC sessions for screen {num}")
+        else:
+            print(f"attempting to start VNC sessions for screen {num}")
         self.start_display(num)
 
     def get_geometry(self, num):
@@ -376,19 +400,33 @@ class G2Connect:
         time.sleep(1)
         res = self.proc[procname].poll()
         if res is not None and res != 0:
-            print("hmm, VNC viewer appears to have exited with result {}".format(res))
-            print("stdout:\n" + self.proc[procname].stdout.read().decode())
-            print("stderr:\n" + self.proc[procname].stderr.read().decode())
+            if self.logger is not None:
+                self.logger.error(f"hmm, VNC viewer appears to have exited with result {res}")
+            else:
+                print(f"hmm, VNC viewer appears to have exited with result {res}")
+                print("stdout:\n" + self.proc[procname].stdout.read().decode())
+                print("stderr:\n" + self.proc[procname].stderr.read().decode())
 
-    def start_all(self):
+    def get_screens(self):
+        screens = []
         if 'screens' not in self.config:
-            print("No screens found in config file!")
-            return
-
-        screens = self.config['screens']
-        for name in screens:
+            return screens
+        for name in self.config['screens']:
             name, num = name.split('_')
             num = int(num)
+            screens.append(num)
+        return screens
+
+    def start_all(self):
+        screens = self.get_screens()
+        if len(screens) == 0:
+            if self.logger is not None:
+                self.logger.error("No screens found in config file!")
+            else:
+                print("No screens found in config file!")
+            return
+
+        for num in screens:
             self.start_display(num)
 
     def stop_display(self, num):

@@ -1,0 +1,100 @@
+#! /usr/bin/env python3
+#
+# gen2_play -- play Gen2 sounds
+#
+"""
+Gen2 continuous sound low-latency, high quality audio sink.
+"""
+import sys
+import os
+import socket
+from argparse import ArgumentParser
+
+
+#rate = 44100
+rate = 48000
+channels = 2
+codec = 'opus'
+
+def get_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        # doesn't even have to be reachable
+        s.connect(('10.255.255.255', 1))
+        ipaddr = s.getsockname()[0]
+    except Exception:
+        ipaddr = '127.0.0.1'
+    finally:
+        s.close()
+    return ipaddr
+
+def main(options, args):
+
+    ipaddr = get_ip()
+    #print("listen address is {}:{}".format(ipaddr, port))
+
+    if options.method == 'rtsp-ffmpeg':
+        cmd_str = ("ffplay -rtsp_transport tcp rtsp://{0:}:{1:}/{2:} "
+                   "-nodisp".format(options.rtsp_host, options.rtsp_port,
+                                    options.rtsp_stream))
+
+    elif options.method == 'rtsp-gst':
+        # requires gstreamer & plugins installed
+        cmd_str = ("gst-launch-1.0 rtspsrc latency=10 "
+                   "location=rtsp://{0:}:{1:}/{2:} "
+                   "! rtpjitterbuffer latency=30 "
+                   "! rtpopusdepay ! opusdec "
+                   "! autoaudiosink".format(options.rtsp_host,
+                                            options.rtsp_port,
+                                            options.rtsp_stream))
+
+    elif options.method == 'rtp-ffmpeg':
+        # requires ffmpeg installed
+        cmd_str = ("ffplay -reorder_queue_size 0 -ar {0:} -ac {1:} -acodec {2:} "
+                   "rtp://{3:}:{4:} -autoexit -nodisp".format(options.rate,
+                                                              options.channels,
+                                                              options.codec,
+                                                              ipaddr,
+                                                              options.rtp_port))
+
+    elif options.method == 'roc':
+        # requires roc-recv and sox installed
+        # roc-recv -vv -s rtp+rs8m::port1 -r rs8m::port2 -d pulseaudio -o default
+        cmd_str = ("roc-recv -vv -s rtp+rs8m::{0:} -r rs8m::{1:} -d wav -o - "
+                   "| play -".format(options.rtp_port, options.rtp_port + 1))
+
+    os.system(cmd_str)
+
+if __name__ == '__main__':
+
+    argprs = ArgumentParser("stream Gen2 sound")
+
+    argprs.add_argument("-c", "--channels", type=int,
+                        default=channels,
+                        help="Number of channels to use for the sound sink")
+    argprs.add_argument("--codec", metavar='CODEC', default=codec,
+                        help="CODEC to use for the sound sink")
+    argprs.add_argument("-m", "--method", metavar='METHOD',
+                        choices=['rtsp-ffmpeg', 'rtsp-gst', 'rtp-ffmpeg',
+                                 'roc'],
+                        default='rtsp-ffmpeg',
+                        help="METHOD to use for the sound sink")
+    argprs.add_argument("-p", "--rtp-port", metavar='PORT', type=int,
+                        dest='rtp_port', default=2291,
+                        help="PORT to use for the RTP reception")
+    argprs.add_argument("-r", "--rate", metavar='RATE', type=int,
+                        dest='rate', default=rate,
+                        help="RATE to use for the sound sink")
+    argprs.add_argument("--rtsp-host", metavar='HOST', type=str,
+                        dest='rtsp_host', default='localhost',
+                        help="RTSP HOST to use for the sound sink")
+    argprs.add_argument("--rtsp-port", metavar='PORT', type=int,
+                        dest='rtsp_port', default=8554,
+                        help="RTSP PORT to use for the sound sink")
+    argprs.add_argument("-s", "--rtsp-stream", metavar='NAME', type=str,
+                        dest='rtsp_stream', default="gen2stream",
+                        help="RTSP stream NAME to use for the sound sink")
+
+    (options, args) = argprs.parse_known_args(sys.argv[1:])
+
+    main(options, args)
