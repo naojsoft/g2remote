@@ -125,14 +125,14 @@ After that, the connection should proceed normally.
 
 | Screen | Content |
 | ------ | ------- |
-| 1      | hskymon (observation planning tool) |
+| 1      | SPOT, hskymon (observation planning tools) |
 | 2      | instrument control GUIs |
 | 3      | integgui2 (observation execution tool) |
 | 4      | fitsview (QDAS, quick look, slit alignment, etc), HSC obslog |
-| 5      | guideview (guiding control and monitoring) |
+| 5      | guideview, lgs_gui2 (guiding/AO control and monitoring) |
 | 6      | statmon (current telescope status) |
-| 7      | instrument control and monitoring GUIs |
-| 8      | instrument control and monitoring GUIs |
+| 7      | instrument control and weather monitoring GUIs |
+| 8      | instrument control and weather monitoring GUIs |
 
 Note that each screen is a 2550x1380 VNC window, so you will be managing a
 lot of large screens. Probably you are not interested in all screens.

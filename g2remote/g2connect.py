@@ -295,11 +295,11 @@ class G2Connect:
                 print("Visit http://localhost:8500/ to view screens via web browser.")
                 print("")
 
-        if self.config.get('use_sound', False):
+        if self.config.get('use_sound', True):
             # set up sound forward
-	    # RTSP (gen2 sound)
+	    # WebRTC (gen2 sound)
             t = threading.Thread(target=self.forward_tunnel,
-                                 args=(8554, 'localhost', 8554,
+                                 args=(8889, 'localhost', 8889,
                                        client.get_transport()))
             t.start()
             self.thread.append(t)
