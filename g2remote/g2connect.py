@@ -105,7 +105,7 @@ class G2Connect:
                                                   self.vncserver_hostname)
 
         # For Windows, we have to determine the filepath of the VNC viewer application.
-        if self.get_system() == 'windows':
+        if self.get_system() == 'windows' and self.config.get('use_vnc', False):
             self.find_win_vncviewer()
             if self.debug:
                 print('vncviewer is {}'.format(self.win_vncviewer))
@@ -340,6 +340,9 @@ class G2Connect:
         self.thread = []
 
     def display(self, num):
+        if not self.config.get('use_vnc', False):
+            print(f"VNC viewer feature is not enabled; use web interface")
+            return
         if self.logger is not None:
             self.logger.info(f"attempting to start VNC sessions for screen {num}")
         else:
