@@ -95,7 +95,7 @@ class G2Connect:
         if 'secret' in self.config:
             self.totp = pyotp.TOTP(self.config['secret'])
         self.debug = self.config.get('debug', False)
-        MyHttpRequestHandler.vnc_passwd = self.config['vnc_passwd']
+        MyHttpRequestHandler.vnc_passwd = self.get_passwd()
 
         # The hostname of the VNC server is normally 'localhost',
         # because that is how the SSH tunnel is set up. However, for
@@ -171,17 +171,15 @@ class G2Connect:
             else:
                 print(f"'ssh_key': doesn't seem to refer to an existing file: {ssh_file}")
 
-        if system in ['darwin']:
-            # mac users need to have a VNC password
-            vncpwd = self.config.get('vnc_passwd', '')
-            if len(vncpwd) == 0:
-                if self.logger is not None:
-                    self.logger.error("'vnc_passwd': doesn't seem to have a password")
-                else:
-                    print("'vnc_passwd': doesn't seem to have a password")
+        # users need to have a VNC password
+        vncpwd = self.config.get('vnc_passwd', '')
+        if len(vncpwd) == 0:
+            if self.logger is not None:
+                self.logger.error("'vnc_passwd': doesn't seem to have a password")
+            else:
+                print("'vnc_passwd': doesn't seem to have a password")
 
-        else:
-            # non-mac users need to have a viable VNC password file
+        if self.config.get('use_vnc', False):
             vncpwd_file = self.config['vnc_passwd_file']
             if os.path.exists(vncpwd_file):
                 # For Windows, we need to read in the password from the VNC password
@@ -380,7 +378,7 @@ class G2Connect:
         elif system == 'darwin':
             # <-- Mac OS X
             user = self.config['user']
-            passwd = self.config['vnc_passwd']
+            passwd = self.get_passwd()
             port = 5900 + num
             args = ['open', '-g',
                     "vnc://{}:{}@{}:{}".format(user, passwd, self.vncserver_hostname, port)]
@@ -409,6 +407,9 @@ class G2Connect:
                 print(f"hmm, VNC viewer appears to have exited with result {res}")
                 print("stdout:\n" + self.proc[procname].stdout.read().decode())
                 print("stderr:\n" + self.proc[procname].stderr.read().decode())
+
+    def get_passwd(self):
+        return self.config['vnc_passwd']
 
     def get_screens(self):
         screens = []
