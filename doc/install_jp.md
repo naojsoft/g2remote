@@ -5,7 +5,7 @@
 * 大きなウィンドウが表示可能な高解像度モニター。Apple Retina displayで使用されているHiDPIスクリーンなど。
 * sshクライアントが使えるコマンドライン環境
 * 鍵認証を設定できること (e.g. `ssh-keygen`など。通常ではsshクライアントと共にインストールされています)
-* 自分でパッケージをインストールできるPython3.7以上の環境。Miniconda又はAnacondでの使用を推奨。
+* 自分でパッケージをインストールできるPython3.11以上の環境。Miniconda又はAnacondでの使用を推奨。
 * HTML5対応のWebブラウザ。　サポートされているのブラウザは、Firefox,Chrome,SafariとEdgeです。
 
 ## Windows（補足）
@@ -18,7 +18,7 @@
 
 # インストール方法
 
-すでに仮想環境がある場合は、他の環境への影響を避けるために、Python3.7以上の別の仮想環境を作成してください。
+すでに仮想環境がある場合は、他の環境への影響を避けるために、Python3.11以上の別の仮想環境を作成してください。
 "subaru-gers"という名で、新たな仮想環境を構築する場合は：
 
 ```bash
@@ -49,5 +49,5 @@ $ conda activate subaru-gers
 
 ## ダウンロード
 
-* 全ユーザー：Python3.7以上のシステム環境をお使いください。(不明な場合は、、Minicondaのインストールを推奨します。ダウンロードは[こちら](https://docs.conda.io/en/latest/miniconda.html)です。
+* 全ユーザー：Python3.11以上のシステム環境をお使いください。(不明な場合は、、Minicondaのインストールを推奨します。ダウンロードは[こちら](https://docs.conda.io/en/latest/miniconda.html)です。
 

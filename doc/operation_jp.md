@@ -7,7 +7,7 @@
 1). SSH鍵を作成します。
 
 ```bash
-$ ssh-keygen -b 4096 -f gen2_connect
+$ ssh-keygen -t ed25519 -f gen2_connect
 ```
 
 重要：**パスフレーズは設定しないでください。** パスフレーズを設定するとプログラムが正しく動作しません。

@@ -8,7 +8,7 @@ all requirements as outlined in the file [install.md](https://github.com/naojsof
 1). Generate an ssh-key with
 
 ```bash
-$ ssh-keygen -b 4096 -f gen2_connect
+$ ssh-keygen -t ed25519 -f gen2_connect
 ```
 
 IMPORTANT: *do not add a passphrase* (press Return or Enter when prompted);

@@ -7,7 +7,7 @@
 * Working command line with an ssh client
 * Ability to generate strong ssh keys (e.g. `ssh-keygen` program;
   usually already installed with ssh client)
-* python (version 3.7 or higher) in which you can install your own
+* python (version 3.11 or higher) in which you can install your own
   packages (we recommend using Miniconda or Anaconda)
 * HTML5 enabled web browser.  Supported browsers include Firefox, Chrome,
   Safari and Edge.  Others may work as well.
@@ -23,15 +23,15 @@
 
 # Installation
 
-Create a separate conda environment with a version of Python >= 3.7.
+Create a separate conda environment with a version of Python >= 3.11.
 This will insure that you don't disturb any other Python environments
 you may have configured.  Here we give it the name "subaru-gers":
 
 ```bash
-$ conda create -n subaru-gers python=3.10
+$ conda create -n subaru-gers python=3.11
 ```
 
-Conda activate your Python 3.7+ environment.  Install the "git" and
+Conda activate your Python 3.11+ environment.  Install the "git" and
 "paramiko" packages:
 
 ```bash
@@ -58,7 +58,7 @@ See file [operation.md](https://github.com/naojsoft/g2remote/blob/master/doc/ope
 
 ## Downloads
 
-* All users: make sure you have a working Python 3.7 or later standard
+* All users: make sure you have a working Python 3.11 or later standard
   environment.  (We recommend installing Miniconda if you are not sure;
   [download here](https://docs.conda.io/en/latest/miniconda.html))
 
