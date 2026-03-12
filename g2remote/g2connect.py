@@ -263,7 +263,7 @@ class G2Connect:
         if self.config.get('use_guac', False):
             # set up Guacamole forward
             t = threading.Thread(target=self.forward_tunnel,
-                                 args=(5908, 'localhost', 443,
+                                 args=(5908, 'localhost', 5908,
                                        client.get_transport()))
             t.start()
             self.thread.append(t)
