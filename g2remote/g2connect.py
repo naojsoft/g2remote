@@ -260,15 +260,13 @@ class G2Connect:
         # set up threads for all the port forwards
         self.thread = []
 
-        if self.config.get('use_vnc', False):
-            # set up VNC forwards
-            for num in _screens:
-                port = 5900 + num
-                t = threading.Thread(target=self.forward_tunnel,
-                                     args=(port, 'localhost', port,
-                                           client.get_transport()))
-                t.start()
-                self.thread.append(t)
+        if self.config.get('use_guac', False):
+            # set up Guacamole forward
+            t = threading.Thread(target=self.forward_tunnel,
+                                 args=(5908, 'localhost', 443,
+                                       client.get_transport()))
+            t.start()
+            self.thread.append(t)
 
         if self.config.get('use_novnc', True):
             # set up noVNC forwards
